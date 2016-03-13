@@ -13,7 +13,7 @@ var gameOver = false;
 
 
 // Initialize a 'fresh' deck
-var deckReset = function() {
+function deckReset() {
 	activeDeck = [];
 	for (var i = 0; i < deckMaster.length; i++) {
 		activeDeck[i] = deckMaster[i].concat();
@@ -22,7 +22,7 @@ var deckReset = function() {
 
 
 // Get a random card from the active deck
-var getCard = function() {
+function getCard() {
 	var suit = Math.floor(Math.random() *  activeDeck.length);
 	var card = Math.floor((Math.random() * (activeDeck[suit].length - 1)) + 1);
 	var card_s = activeDeck[suit][card] + ' ' + activeDeck[suit][0];
@@ -40,7 +40,7 @@ var getCard = function() {
 
 
 // Assign initial cards to the dealer and player
-var dealHands = function() {
+function dealHands() {
 
 	// Reset these elements first
 	document.getElementById('player-hand').innerHTML = '';
@@ -77,7 +77,7 @@ var dealHands = function() {
 };
 
 // Convert's a hand of card values to an integer
-var evalHand = function(hand) {
+function evalHand(hand) {
 	var handValue = 0;
 	var aceFound = 0;
 
@@ -108,7 +108,7 @@ var evalHand = function(hand) {
 };
 
 // If the player busted, the dealer automatically wins
-var dealerLoop = function() {
+function dealerLoop() {
 	dealerHand[1] = getCard();
 	dealerValue = evalHand(dealerHand);
 	updateDealer();
@@ -123,7 +123,7 @@ var dealerLoop = function() {
 };
 
 // After the dealer's turn, determine who wins
-var resolveWin = function() {	
+function resolveWin() {	
 	var results = '';
 	if (playerValue > 21) {
 		results = 'Player busts with ' + playerValue + ', Dealer wins.';
@@ -143,7 +143,7 @@ var resolveWin = function() {
 };
 
 // Update the DOM with player data
-var updatePlayer = function() {
+function updatePlayer() {
 	document.getElementById('player-hand').innerHTML = '';
 	for (var i = 0; i < playerHand.length; i++) {
 		var value = playerHand[i].split(' ')[0];
@@ -154,7 +154,7 @@ var updatePlayer = function() {
 };
 
 // Update the DOM with dealer data
-var updateDealer = function() {
+function updateDealer() {
 	document.getElementById('dealer-hand').innerHTML = '';
 	for (var i = 0; i < dealerHand.length; i++) {
 		var value = dealerHand[i].split(' ')[0];
@@ -164,11 +164,19 @@ var updateDealer = function() {
 	document.getElementById('dealer-score').innerHTML = dealerValue;
 };
 
+// Force 'shingled' cards to overlap
+function alignDeck() {
+	var sideCards = document.querySelectorAll('#deck img');
+	for (var i = 0; i < sideCards.length; i++) {
+		sideCards[i].style.left = '' + (i * -6) + 'px';
+		console.log(sideCards[i].style.left);
+	}
+};
 
 $(document).ready(function() {
+	alignDeck()
 	deckReset();
 	dealHands();
-
 	// Hit me!
 	$('.controls:nth-of-type(1)').click(function() {
 		if (!gameOver) {
@@ -195,3 +203,5 @@ $(document).ready(function() {
 		dealHands();
 	});
 });
+
+
